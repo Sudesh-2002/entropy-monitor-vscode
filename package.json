@@ -1,8 +1,8 @@
 {
-  "name": "entropy-monitor-vscode",
-  "displayName": "Entropy Monitor",
+  "name": "codebase-entropy",
+  "displayName": "Codebase Entropy",
   "description": "Tracks codebase disorder — coupling, duplication, dead code — live in your editor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "sudeshhansika",
   "engines": {
     "vscode": "^1.85.0"
@@ -30,7 +30,7 @@
         {
           "id": "entropyMonitor",
           "title": "Entropy Monitor",
-          "icon": "images/icon-bar.svg"
+          "icon": "images/icon.png"
         }
       ]
     },
@@ -39,7 +39,8 @@
         {
           "type": "webview",
           "id": "entropyMonitor.sidebar",
-          "name": "Health Dashboard"
+          "name": "Health Dashboard",
+          "icon": "images/icon.png"
         }
       ]
     },
