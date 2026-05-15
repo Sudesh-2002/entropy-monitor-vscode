@@ -29,6 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       statusBar.setScanning();
+      sidebar.setScanning();
       vscode.window.withProgress(
         { location: vscode.ProgressLocation.Notification, title: 'Entropy Monitor scanning…', cancellable: false },
         async () => {
@@ -67,8 +68,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(statusBar, diagnosticCollection);
 
-  // Auto-scan on startup
   const config = vscode.workspace.getConfiguration('entropyMonitor');
+
+  // Auto-scan on startup
   if (config.get<boolean>('autoScan')) {
     setTimeout(() => {
       vscode.commands.executeCommand('entropyMonitor.scan');
@@ -82,6 +84,31 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.executeCommand('entropyMonitor.scan');
       })
     );
+  }
+
+  // File watcher for real-time scanning
+  const watcher = vscode.workspace.createFileSystemWatcher(
+    '**/*.{ts,tsx,js,jsx}',
+    false, // don't ignore creates
+    false, // don't ignore changes
+    false  // don't ignore deletes
+  );
+
+  let debounceTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const debouncedScan = () => {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      vscode.commands.executeCommand('entropyMonitor.scan');
+    }, 5000); // wait 5 seconds after last change before scanning
+  };
+
+  const scanOnSave = config.get<boolean>('scanOnSave');
+  if (scanOnSave) {
+    watcher.onDidChange(debouncedScan);
+    watcher.onDidCreate(debouncedScan);
+    watcher.onDidDelete(debouncedScan);
+    context.subscriptions.push(watcher);
   }
 }
 

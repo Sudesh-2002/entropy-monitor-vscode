@@ -7,6 +7,8 @@ export interface EntropyResult {
   totalLines: number;
   unusedExports: number;
   unusedFiles: number;
+  duplicateBlocks: number;
+  unresolvedImports: number;
   scannedAt: number;
   error?: string;
 }
@@ -20,5 +22,7 @@ export const emptyResult = (): EntropyResult => ({
   totalLines: 0,
   unusedExports: 0,
   unusedFiles: 0,
+  duplicateBlocks: 0,
+  unresolvedImports: 0,
   scannedAt: Date.now(),
 });
