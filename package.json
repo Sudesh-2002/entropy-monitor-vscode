@@ -4,6 +4,12 @@
   "description": "Tracks codebase disorder — coupling, duplication, dead code — live in your editor",
   "version": "0.1.1",
   "publisher": "sudeshhansika",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sudesh-2002/entropy-monitor-vscode.git"
+  },
+  "license": "MIT",
+  "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -30,7 +36,7 @@
         {
           "id": "entropyMonitor",
           "title": "Entropy Monitor",
-          "icon": "images/icon.png"
+          "icon": "images/icon-bar.svg"
         }
       ]
     },
@@ -40,7 +46,7 @@
           "type": "webview",
           "id": "entropyMonitor.sidebar",
           "name": "Health Dashboard",
-          "icon": "images/icon.png"
+          "icon": "images/icon-bar.svg"
         }
       ]
     },
