@@ -1,0 +1,85 @@
+{
+  "name": "entropy-monitor-vscode",
+  "displayName": "Entropy Monitor",
+  "description": "Tracks codebase disorder — coupling, duplication, dead code — live in your editor",
+  "version": "0.1.0",
+  "publisher": "sudeshhansika",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Linters", "Visualization", "Other"],
+  "keywords": ["entropy", "code quality", "technical debt", "coupling", "duplication"],
+  "activationEvents": [
+    "workspaceContains:**/*.ts",
+    "workspaceContains:**/*.js"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "entropyMonitor.scan",
+        "title": "Entropy Monitor: Scan Workspace"
+      },
+      {
+        "command": "entropyMonitor.showReport",
+        "title": "Entropy Monitor: Show Report"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "entropyMonitor",
+          "title": "Entropy Monitor",
+          "icon": "images/icon-bar.svg"
+        }
+      ]
+    },
+    "views": {
+      "entropyMonitor": [
+        {
+          "type": "webview",
+          "id": "entropyMonitor.sidebar",
+          "name": "Health Dashboard"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Entropy Monitor",
+      "properties": {
+        "entropyMonitor.autoScan": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically scan when a workspace is opened"
+        },
+        "entropyMonitor.scanOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Re-scan every time you save a file"
+        },
+        "entropyMonitor.skipDuplication": {
+          "type": "boolean",
+          "default": false,
+          "description": "Skip duplication analysis (faster scans)"
+        },
+        "entropyMonitor.skipDeadcode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Skip dead code analysis (faster scans)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.3.0",
+    "@vscode/vsce": "^2.24.0"
+  }
+}
