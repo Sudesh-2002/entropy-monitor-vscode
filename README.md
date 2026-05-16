@@ -1,12 +1,23 @@
-# Entropy Monitor — VS Code Extension
+# Codebase Entropy — VS Code Extension
 
 > Your codebase has a heartbeat. This extension shows it.
 
-Entropy Monitor watches your TypeScript project for signs of disorder — tangled imports, copy-pasted code, and dead exports — and surfaces a live health score right in your status bar.
+Codebase Entropy monitors your project for signs of disorder — tangled imports, copy-pasted code, and dead exports — and surfaces a **live health score** right in your VS Code status bar. No terminal needed.
 
-![VS Code Status Bar](https://img.shields.io/badge/entropy-18%2F100-22c55e?style=flat-square)
-![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/sudeshhansika.entropy-monitor-vscode?style=flat-square)
+![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/sudeshhansika.codebase-entropy?style=flat-square&color=7c3aed)
+![Installs](https://img.shields.io/visual-studio-marketplace/i/sudeshhansika.codebase-entropy?style=flat-square)
+![Rating](https://img.shields.io/visual-studio-marketplace/r/sudeshhansika.codebase-entropy?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
+
+---
+
+## Install
+
+Search **Codebase Entropy** in the VS Code Extensions panel (`Ctrl+Shift+X`), or install from the terminal:
+
+```bash
+code --install-extension sudeshhansika.codebase-entropy
+```
 
 ---
 
@@ -15,49 +26,89 @@ Entropy Monitor watches your TypeScript project for signs of disorder — tangle
 | Signal | What it detects |
 |---|---|
 | **Coupling** | Import graph analysis — which files depend on too many others |
-| **Duplication** | AST-based clone detection — copy-pasted blocks across the codebase |
-| **Dead code** | Unused exports and unreachable files — code nobody calls |
+| **Duplication** | AST-based clone detection — copy-pasted blocks across files |
+| **Dead code** | Unused exports, unused files, and unresolved imports |
 
-Each signal scores 0–100. Lower is healthier. They average into one **Overall Entropy** score shown in your status bar at all times.
+Each signal scores **0–100**. Lower is healthier. They average into one **Overall Entropy** score shown in your status bar at all times.
+
+---
+
+## Supported languages
+
+Auto-detected from your project files — no configuration needed.
+
+| Language | Coupling | Duplication | Dead code |
+|---|---|---|---|
+| TypeScript | ✅ | ✅ | ✅ |
+| JavaScript | ✅ | ✅ | ✅ |
+| Python | ✅ | ✅ | — |
+| Java | ✅ | ✅ | — |
+| Go | ✅ | ✅ | — |
+| Ruby | ✅ | ✅ | — |
+| C / C++ | ✅ | ✅ | — |
+
+Override auto-detection via the `entropyMonitor.languages` setting.
 
 ---
 
 ## Features
 
-- **Live status bar score** — see entropy at a glance without leaving your editor
-- **Sidebar health dashboard** — four score cards with colour-coded bars, file counts, and scan history
-- **Auto-scan on open** — scans your workspace 3 seconds after VS Code loads
-- **Scan on save** — optional continuous monitoring as you write code
+- **Live status bar score** — see your entropy score at a glance without leaving your editor
+- **Colour-coded health** — green under 30, yellow under 60, red above 60
+- **Grade system** — A+ to F grade alongside the score
+- **Sidebar health dashboard** — score cards for all four metrics with colour-coded progress bars
+- **Detailed stat table** — total lines, unused exports, unused files, duplicate blocks, unresolved imports
+- **Auto-scan on open** — scans your workspace a few seconds after VS Code loads
+- **Debounced file watcher** — re-scans automatically 5 seconds after you stop making changes (when scan-on-save is enabled)
 - **One-click HTML report** — generates a full interactive Chart.js dashboard and opens it in your browser
-- **Command palette integration** — run scans manually anytime
+- **Command palette integration** — trigger scans manually at any time
+- **Multi-language support** — TypeScript, JavaScript, Python, Java, Go, Ruby, C/C++
 
 ---
 
-## Installation
+## How it works
 
-Search **Entropy Monitor** in the VS Code Extensions panel, or install directly:
-
-```bash
-code --install-extension sudeshhansika.entropy-monitor-vscode
+```
+VS Code workspace opens
+        ↓
+Extension activates (detects .ts / .js / .py / .java / .go / .rb / .cpp files)
+        ↓
+Runs: npx entropy-monitor scan /your/project --no-save --json
+        ↓
+Parses JSON output — coupling, duplication, dead code scores
+        ↓
+Updates status bar + sidebar dashboard instantly
 ```
 
-Requires [entropy-monitor](https://www.npmjs.com/package/entropy-monitor) to be available via `npx` (no global install needed).
+The extension shells out to the [entropy-monitor CLI](https://www.npmjs.com/package/entropy-monitor). The analysis engine stays up to date independently of the extension via npm.
 
 ---
 
-## Usage
+## Status bar
 
-Once installed, open any TypeScript project. The extension activates automatically.
+The status bar item at the bottom of VS Code shows your score at all times:
 
-| What you see | What it means |
+| Display | Meaning |
 |---|---|
-| `♥ Entropy: 18/100` in green | Healthy codebase |
-| `⚠ Entropy: 52/100` in yellow | Some disorder building up |
-| `✗ Entropy: 78/100` in red | Needs attention |
+| `♥ Entropy: 18/100` in green | Healthy — score below 30 |
+| `⚠ Entropy: 52/100` in yellow | Some disorder building up — score 30–60 |
+| `✗ Entropy: 78/100` in red | Needs attention — score above 60 |
+| `⟳ Entropy…` spinning | Scan in progress |
 
-Click the status bar item to trigger a manual scan.
+Click the status bar item to trigger a manual re-scan.
 
-Open the **Entropy Monitor** icon in the activity bar to see the full breakdown.
+---
+
+## Sidebar dashboard
+
+Open the **Codebase Entropy** icon in the activity bar (left sidebar) to see:
+
+- Large overall score with letter grade (A+ to F)
+- Four score cards: Coupling, Duplication, Dead code, Files
+- Stat table: total lines, unused exports, unused files, duplicate blocks, unresolved imports
+- Last scan time
+- Scan Now button
+- Open HTML Report button
 
 ---
 
@@ -68,46 +119,102 @@ Open the Command Palette (`Ctrl+Shift+P`) and search:
 | Command | Description |
 |---|---|
 | `Entropy Monitor: Scan Workspace` | Run a full scan immediately |
-| `Entropy Monitor: Show Report` | Generate and open the HTML dashboard |
+| `Entropy Monitor: Show Report` | Generate and open the HTML dashboard in your browser |
 
 ---
 
 ## Settings
 
+Open Settings (`Ctrl+,`) and search **Entropy Monitor**:
+
 | Setting | Default | Description |
 |---|---|---|
 | `entropyMonitor.autoScan` | `true` | Scan automatically when workspace opens |
-| `entropyMonitor.scanOnSave` | `false` | Re-scan every time a file is saved |
+| `entropyMonitor.scanOnSave` | `false` | Re-scan 5 seconds after the last file save |
 | `entropyMonitor.skipDuplication` | `false` | Skip duplication analysis for faster scans |
 | `entropyMonitor.skipDeadcode` | `false` | Skip dead code analysis for faster scans |
+| `entropyMonitor.languages` | `""` | Languages to scan — leave empty for auto-detect |
+
+### Language override examples
+
+In your VS Code `settings.json`:
+
+```json
+{
+  "entropyMonitor.languages": "python",
+  "entropyMonitor.skipDuplication": false,
+  "entropyMonitor.scanOnSave": true
+}
+```
+
+```json
+{
+  "entropyMonitor.languages": "typescript,python",
+  "entropyMonitor.skipDeadcode": true
+}
+```
 
 ---
 
-## How it works
+## Requirements
 
-```
-VS Code workspace opens
-        ↓
-Extension activates (workspaceContains: **/*.ts)
-        ↓
-Runs: npx entropy-monitor scan /your/project --no-save
-        ↓
-Parses scores from CLI output
-        ↓
-Updates status bar + sidebar dashboard
-```
+- VS Code 1.85 or higher
+- Node.js 20 or higher
+- Internet access for the first run (`npx` downloads `entropy-monitor` automatically)
 
-The extension shells out to the [entropy-monitor CLI](https://www.npmjs.com/package/entropy-monitor) — a separate npm package that does the actual analysis. This means the analysis engine stays up to date independently of the extension.
+No global install required — `npx` handles it on first use.
 
 ---
 
-## Related
+## Performance tips
 
-- [entropy-monitor](https://www.npmjs.com/package/entropy-monitor) — the CLI tool this extension wraps
-- [GitHub repository](https://github.com/yourusername/entropy-monitor-vscode)
+For large codebases (1000+ files), scans can take 30–60 seconds due to duplication analysis. Speed it up:
+
+```json
+{
+  "entropyMonitor.skipDuplication": true,
+  "entropyMonitor.scanOnSave": false
+}
+```
+
+This reduces scan time to under 5 seconds in most projects.
+
+---
+
+## Privacy
+
+All analysis runs **entirely on your local machine**. No code, file names, or metrics are ever sent to any server. The extension only communicates with VS Code APIs and the local `entropy-monitor` CLI process.
+
+---
+
+## Companion CLI
+
+The full CLI tool gives you history tracking, HTML reports, diffs, and CI gates:
+
+```bash
+npm install -g entropy-monitor
+
+entropy-monitor scan .
+entropy-monitor history .
+entropy-monitor diff .
+entropy-monitor report .
+entropy-monitor ci . --max-overall 70
+```
+
+Install it: [npmjs.com/package/entropy-monitor](https://www.npmjs.com/package/entropy-monitor)
 
 ---
 
 ## License
 
 MIT © Sudesh Hansika
+
+---
+
+## Links
+
+- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=sudeshhansika.codebase-entropy)
+- [CLI on npm](https://www.npmjs.com/package/entropy-monitor)
+- [GitHub — Extension](https://github.com/sudesh-2002/entropy-monitor-vscode)
+- [GitHub — CLI](https://github.com/sudesh-2002/entropy-monitor)
+- [Report an issue](https://github.com/sudeshhansika/entropy-monitor-vscode/issues)
