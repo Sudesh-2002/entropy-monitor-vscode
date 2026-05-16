@@ -7,7 +7,9 @@ export async function runScan(workspacePath: string): Promise<EntropyResult> {
   const skipDup  = config.get<boolean>('skipDuplication') ? '--skip-duplication' : '';
   const skipDead = config.get<boolean>('skipDeadcode')    ? '--skip-deadcode'    : '';
 
-  const cmd = `npx entropy-monitor scan "${workspacePath}" ${skipDup} ${skipDead} --no-save --json`
+  const langConfig = config.get<string>('languages') ?? '';
+  const langFlag = langConfig.trim() ? `--lang "${langConfig.trim()}"` : '';
+  const cmd = `npx entropy-monitor scan "${workspacePath}" ${skipDup} ${skipDead} ${langFlag} --no-save --json`
     .replace(/\s+/g, ' ')
     .trim();
 

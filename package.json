@@ -2,7 +2,7 @@
   "name": "codebase-entropy",
   "displayName": "Codebase Entropy",
   "description": "Tracks codebase disorder — coupling, duplication, dead code — live in your editor",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "publisher": "sudeshhansika",
   "repository": {
     "type": "git",
@@ -88,5 +88,10 @@
     "esbuild": "^0.20.0",
     "typescript": "^5.3.0",
     "@vscode/vsce": "^2.24.0"
+  },
+  "entropyMonitor.languages": {
+    "type": "string",
+    "default": "",
+    "description": "Comma-separated languages to scan. Leave empty for auto-detect. Options: typescript, javascript, python, java, go, ruby, cpp"
   }
 }
